@@ -14,9 +14,6 @@
       "disable_default_service_account": false,
       "service_account_email": "solr-image-build@my-dummy-project.iam.gserviceaccount.com",
       "machine_type": "n1-standard-1",
-      "metadata": {
-        "myid": "1"
-      },
       "network": "my-network",
       "subnetwork": "my-network-us-central1-subnet",
       "use_internal_ip": true,
