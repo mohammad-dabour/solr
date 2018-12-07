@@ -1,5 +1,5 @@
 env: my-dummy-project
-sa_name: solr-purchase-sa
+sa_name: solr-service-account-name
 machine_type: n1-highmem-2
 zones: {us-east1: [b,c,d], us-central1: [b,c,f]}
 fqd: "c.{{ env }}.internal:8983_solr"
