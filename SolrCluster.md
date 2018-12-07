@@ -30,7 +30,7 @@
      zones: {us-east1: [b,c,d], us-central1: [b,c,f]}
      fqd: "c.{{ env }}.internal:8983_solr"
      img: 'solr-image-name'
-     zkcluster: 'purchase2'
+     zkcluster: 'clutster1'
      shards: 1
      replicas: 3
      collection_bucket: collections-bucket
