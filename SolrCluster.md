@@ -71,5 +71,5 @@ $ ansible-playbook mount_backup.yml  -i /tmp/hosts --private-key=/home/deployer/
 
 
 * Firewall rules are needed  to allow SSH into the image while packer building it. 
-  So we used this [tag](solr/img-pakcer.json#L27)
+  So we used this [tag](solr/img-pakcer.json#L23)
 
