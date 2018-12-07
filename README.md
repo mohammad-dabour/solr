@@ -1,4 +1,4 @@
-# solr Build and Deployment
+# Solr Build and Deployment
 Deploying Solr and build. currently this is intiial version for deploying solr over google cloud GCP, soon i will publish the AWS version:
 
 #### Image Build details:
