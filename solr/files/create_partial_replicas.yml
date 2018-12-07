@@ -22,7 +22,7 @@
 
 - name: adding replicas to their shards based on sopecified group
   uri:
-    url: "http://{{ host }}:8983/solr/admin/collections?action=ADDREPLICA&collection={{ collection }}&shard=shard{{final_dict[ item[1] ] }}&node=solr-{{ env }}-{{ region }}-{{ item[0] }}-{{ item[1] }}.{{ fqd }}"
+    url: "http://{{ host }}:8983/solr/admin/collections?action=ADDREPLICA&collection={{ collection }}&shard=shard{{final_dict[ item[1] ] }}&node=solr-{{ env }}-{{ region }}-{{ item[0] }}-{{ item[1] }}-{{ postfix }}.{{ fqd }}"
   with_nested:
     - "{{ z }}"
     - "{{ s }}"
