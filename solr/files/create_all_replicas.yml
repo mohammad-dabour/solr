@@ -1,0 +1,16 @@
+---
+- name: DEBUG
+  debug:
+   msg: "http://{{ host }}:8983/solr/admin/collections?action=CREATE&name={{ collection }}&numShards={{ shards }}&replicationFactor={{ replicas }}&maxShardsPerNode={{ maxShardsPerNode }}&collection.configName={{ collection }}Conf&createNodeSet=EMPTY"
+
+- name: adding shard
+  uri:
+    url: "http://{{ host }}:8983/solr/admin/collections?action=CREATE&name={{ collection }}&numShards={{ shards }}&replicationFactor={{ replicas }}&maxShardsPerNode={{ maxShardsPerNode }}&collection.configName={{ collection }}Conf&createNodeSet=EMPTY"
+
+
+- name: adding all replicas to their shards
+  uri:
+    url: "http://{{ host }}:8983/solr/admin/collections?action=ADDREPLICA&collection={{ collection }}&shard=shard{{ item[1] }}&node=solr-{{ env }}-{{ region }}-{{ item[0] }}-shard{{ item[1] }}-{{ postfix }}.{{ fqd }}"
+  with_nested:
+    - "{{ z }}"
+    - "{{ range(1,s+1) | list }}"

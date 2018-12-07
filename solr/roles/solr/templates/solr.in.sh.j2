@@ -1,0 +1,21 @@
+SOLR_PID_DIR="{{ SOLR_BASE_DIR }}"
+SOLR_HOME="{{ SOLR_BASE_DIR }}/data"
+LOG4J_PROPS="{{ SOLR_BASE_DIR }}/log4j.properties"
+SOLR_LOGS_DIR="{{ SOLR_BASE_DIR }}/logs"
+SOLR_PORT={{ solr_port }}
+JMX_PORT='9010'
+SOLR_JAVA_MEM='-Xms16g -Xmx18g'
+SOLR_TIMEZONE='UTC'
+GC_LOG_OPTS='-verbose:gc -XX:+PrintHeapAtGC -XX:+PrintGCDetails  -XX:+PrintGCDateStamps -XX:+PrintGCTimeStamps -XX:+PrintTenuringDistribution'
+GC_LOG_FILES='-XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=5 -XX:GCLogFileSize=30M'
+STOP_KEY='solrrocks'
+#https://wiki.apache.org/solr/ShawnHeisey
+GC_TUNE='-XX:+UseG1GC  -XX:+PerfDisableSharedMem  -XX:+ParallelRefProcEnabled  -XX:G1HeapRegionSize=8m  -XX:MaxGCPauseMillis=250  -XX:InitiatingHeapOccupancyPercent=75  -XX:+UseLargePages -XX:+AggressiveOpts'
+SOLR_OPTS='-Xss1024k -Ddisable.configEdit=true'
+SOLR_LOG_LEVEL='WARN'
+ENABLE_REMOTE_JMX_OPTS='true'
+RMI_PORT='18983'
+JMX='-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.local.only=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false'
+SOLR_HOST=$(echo $(host `hostname`|awk '{print $1}'|tr -d '\n \r'))
+ZK_HOST=$(cat /tmp/ZK)
+ZK_CLIENT_TIMEOUT=30000

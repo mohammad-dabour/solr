@@ -1,0 +1,25 @@
+---
+# get java bucket from gs storage:
+
+- name: Download java pakcage from gcp storage.
+  gc_storage:
+    bucket: {{ gcp_bucket }}
+    object: {{ java }}
+    dest: /tmp/
+    mode: get
+  register: gc_storage_result
+
+- name: Creates JVM directory
+  file: path={{ jvm }}/jvm state=directory
+  register: gc_storage_result
+
+- name: unarchive jdk into path
+  unarchive:
+    src: /tmp/{{ java }}
+    dest: {{ jvm }}/jvm
+  register: unarchive_result
+
+- name: fail the play if the previous unarchive or Download java or  Creates JVM directory did not succeed.
+  fail:
+    msg: "the java task failed"
+  when: "'FAILED' in command_result.stderr"

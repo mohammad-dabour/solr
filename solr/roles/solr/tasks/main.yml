@@ -1,0 +1,2 @@
+- name: import solr task
+  import_tasks: solr.yml

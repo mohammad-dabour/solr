@@ -1,0 +1,88 @@
+---
+
+- apt_repository:
+    repo: deb http://packages.cloud.google.com/apt gcsfuse-trusty main
+    codename: trusty
+    state: present
+    filename: /etc/apt/sources.list.d/gcsfuse.list
+    update_cache: yes
+
+- name: install gcsfuse
+  apt: name=gcsfuse state=present force=yes
+
+- name: Systemctl install
+  apt: name=systemd state=installed
+
+
+- name: Download java pakcage from gcp storage. Use gsutil instad of gc_storage it requires lord access using boto let's not use it.
+  shell: >
+     /usr/bin/gsutil cp gs://"{{ solr_bucket }}/{{ gs_solr }}/{{ solr_pkg }}"  "{{ solr_artifcat_dir }}/"
+  register: gc_storage_result
+
+
+- name: get the output directory name
+  shell: "ls {{ solr_artifcat_dir }}/{{ solr_pkg }}"
+  register: solr_out
+
+
+
+- name: copy install_solr_service.sh to /tmp/
+  copy:
+    src: install_solr_service.sh
+    dest: /tmp/
+
+
+- name: set install_solr_service.sh permissions.
+  file:
+    path: /tmp/install_solr_service.sh
+    owner: root
+    group: root
+    mode: 0700
+
+- name: install solr using install_solr_service
+  command: '/tmp/install_solr_service.sh {{ solr_out.stdout_lines[0] }} -i {{ solr_install_dir }} -d {{ SOLR_BASE_DIR }} -u {{ solr_user }}  -s {{ solr_service_name }}  -p {{ solr_port }} -n'
+
+- name: Remove solr init.d file
+  file:
+    state: absent
+    path: /etc/init.d/solr
+
+- name: Copy solr service
+  template:
+    src: "solr.service.j2"
+    dest: "/etc/systemd/system/solr.service"
+    owner: "{{ solr_user }}"
+    mode: 0755
+
+- name: Copy solr prestart script
+  copy:
+    src: prestart.sh
+    dest: "/usr/local/bin/prestart.sh"
+    owner: "{{ solr_user }}"
+    mode: 0755
+
+
+- name: Solr file
+  template:
+    src: "solr.in.sh.j2"
+    dest: "/etc/default/solr.in.sh"
+    owner: "{{ solr_user }}"
+    mode: 06544
+
+
+- file:
+    path: /opt/solr-bp
+    state: directory
+    mode: 0775
+    owner: solr
+    group: solr
+
+- name: Adding user solr
+  user: name="solr"
+        group="fuse"
+        append=yes
+
+
+
+- name: Enable solr.service.
+  service: name=solr.service enabled=yes

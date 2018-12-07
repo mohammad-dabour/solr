@@ -1,0 +1,35 @@
+{
+  "builders": [
+     {
+      "type": "googlecompute",
+      "project_id": "my-dummy-project",
+      "source_image_family": "ubuntu-1404-lts",
+      "ssh_username": "deployer",
+      "communicator": "ssh",
+      "ssh_port": 22,
+      "ssh_private_key_file": "/home/deployer/.ssh/deployer-key",
+      "image_name": "solr-{{timestamp}}",
+      "zone": "us-central1-c",
+      "ssh_pty": true,
+      "disable_default_service_account": false,
+      "service_account_email": "solr-image-build@my-dummy-project.iam.gserviceaccount.com",
+      "machine_type": "n1-standard-1",
+      "metadata": {
+        "myid": "1"
+      },
+      "network": "my-network",
+      "subnetwork": "my-network-us-central1-subnet",
+      "use_internal_ip": true,
+      "tags": ["whatever Needed"],
+      "omit_external_ip": true
+    }
+  ],
+ "provisioners": [
+    {
+      "type": "ansible",
+      "extra_arguments": [ "-vvv" ],
+      "ansible_env_vars": ["ANSIBLE_HOST_KEY_CHECKING=False", "ANSIBLE_SSH_ARGS='-o ForwardAgent=yes -o ControlMaster=auto -o ControlPersist=60s'","become=true","become_method=sudo"],      
+      "playbook_file": "./SolrBuild.yml"
+    }
+  ]
+}

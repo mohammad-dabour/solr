@@ -1,0 +1,8 @@
+- name: import gc_template task
+  include_tasks: gc_instances.yml
+  vars:
+    zone: "{{ clusterParam.value }}"
+    region: "{{ clusterParam.key }}"
+  with_dict: "{{ zones }}"
+  loop_control:
+     loop_var: clusterParam

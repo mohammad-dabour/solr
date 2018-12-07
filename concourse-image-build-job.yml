@@ -1,0 +1,37 @@
+resources:
+
+
+jobs:
+
+- name: Solr-img-build
+  plan: 
+    #- get: templates
+    - task: run-docker-gcloud
+      config:
+        platform: linux
+        image_resource:
+            type: docker-image
+            source:
+              repository: gcr.io/my-dummy-project/solrbuild
+              username: _json_key
+              password: ((keys))
+        params:
+            account: ((keys))
+        run:
+         path: /bin/bash
+         args:
+           - -c
+           - |
+                  echo "Initilize"
+                  echo $account > /tmp/account.json
+                  /home/deployer/google-cloud-sdk/bin/gcloud auth activate-service-account --key-file /tmp/account.json 
+                  mkdir -p /home/deployer/.ssh
+                  /home/deployer/google-cloud-sdk/bin/gcloud auth list
+                  /home/deployer/google-cloud-sdk/bin/gcloud config set project my-dummy-project
+                  /home/deployer/google-cloud-sdk/bin/gcloud compute config-ssh --ssh-key-file=/home/deployer/.ssh/deployer-key --quiet
+                  echo "SSH key"
+
+                  echo -e "Host *" > ~/.ssh/config 
+                  echo -e "StrictHostKeyChecking no" >> ~/.ssh/config
+
+                  packer build /tmp/solr/img-pakcer.json

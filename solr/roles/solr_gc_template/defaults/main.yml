@@ -1,0 +1,14 @@
+env: my-dummy-project
+sa_name: solr-purchase-sa
+machine_type: n1-highmem-2
+zones: {us-east1: [b,c,d], us-central1: [b,c,f]}
+fqd: "c.{{ env }}.internal:8983_solr"
+img: 'solr-image-name'
+zkcluster: 'cluster1'
+shards: 1
+replicas: 3
+collection_bucket: Dummy-collections-buckets
+collections: [collection1,collection2,collection3]
+collectionConf: {collection1: 'all', collection2: 'all',collection3: [1]}
+maxShardsPerNode: 1
+postfix: "a"

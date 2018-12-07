@@ -1,0 +1,15 @@
+- hosts: all
+  become_method: sudo
+  become: yes
+  remote_user: {{ USER }}
+  vars_files:
+     - roles/solr_gc_template/defaults/main.yml
+  vars:
+     solr_host: "{{ solr }}" 
+  tasks:
+    - name: downloading collections from gs buckets.
+      shell: |
+          /usr/bin/gsutil cp -r "gs://{{ collection_bucket }}/{{ item }}"  "/tmp/"
+          zk=$(cat /tmp/ZK)
+          sudo -u solr /opt/solr/bin/solr zk upconfig -d "/tmp/{{ item }}"  -n "{{ item }}Conf" -z $zk
+      with_items: "{{ collections }}"

@@ -1,0 +1,8 @@
+- hosts: localhost
+  become_method: sudo
+  become: yes
+  remote_user: {{ USER }}
+  tasks:
+    - import_role:
+        name: solr_gc_template
+      tags: gc_template

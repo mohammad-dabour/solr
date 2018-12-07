@@ -1,0 +1,2 @@
+- name: import java task
+  import_tasks: java.yml

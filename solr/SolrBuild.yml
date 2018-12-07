@@ -1,0 +1,9 @@
+- hosts: all
+  become_method: sudo
+  become: yes
+  remote_user: deployer
+  tasks:
+    - import_role:
+        name: common
+    - import_role:
+        name: solr

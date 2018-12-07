@@ -1,0 +1,11 @@
+---
+gcp_bucket: solr-bucket-gcp
+java: "*jdk*"
+
+java_gs_path: java
+
+jvm: /usr/local/lib/jvm
+java_artifcat_dir: /tmp
+java_home: /usr/local/lib/jvm/jdk
+
+bashrc: /etc/bash.bashrc

@@ -1,0 +1,19 @@
+- hosts: all
+  become_method: sudo
+  become: yes
+  remote_user: {{ USER }}
+  vars_files:
+     - roles/solr_gc_template/defaults/main.yml
+  tasks:
+
+#    - name: Mount bucket into local file system. just incase the system rebooted the bucket has to comeup
+#      mount:
+#        src: "{{ env }}-solr-backup"
+#        path: /opt/solr-bp
+#        fstype: gcsfuse
+#        opts: rw,noauto,user
+#        state: present
+
+    - name: Mount bucket into local file system. just incase the system rebooted the bucket has to comeup
+      shell: |
+         sudo -u solr gcsfuse "{{ env }}-solr-backup" /opt/solr-bp 

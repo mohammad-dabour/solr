@@ -1,0 +1,79 @@
+- set_fact:
+    hosts: []
+
+- name: create a instance
+  gcp_compute_instance:
+      name: "solr-{{ env }}-{{ item[2] }}-{{ item[0] }}-shard{{ item[1] }}-{{ postfix }}"
+      machine_type: "{{ machine_type }}"
+      service_accounts:
+         - email: "{{ sa_name }}@{{ env }}.iam.gserviceaccount.com"
+           scopes:
+               - 'https://www.googleapis.com/auth/compute.readonly'
+               - 'https://www.googleapis.com/auth/devstorage.read_only'
+               - 'https://www.googleapis.com/auth/logging.write'
+               - 'https://www.googleapis.com/auth/monitoring.write'
+               - 'https://www.googleapis.com/auth/devstorage.full_control'
+      min_cpu_platform: "Intel Broadwell"
+      can_ip_forward: "yes"
+      scheduling:
+         on_host_maintenance: "MIGRATE"
+         preemptible: false
+         automatic_restart: true
+      disks:
+        - auto_delete: true
+          boot: true
+          mode: "READ_WRITE"
+          type: "PERSISTENT"
+          initialize_params:
+            source_image: "https://www.googleapis.com/compute/v1/projects/{{ env }}/global/images/{{ img }}"
+            disk_type: "pd-ssd"
+            disk_size_gb: 200
+      metadata:
+            ZK: "zk-{{ zkcluster }}-{{ item[2] }}.{{ env }}.dummy.com"
+      network_interfaces:
+          - network: "https://www.googleapis.com/compute/v1/projects/{{ env }}/global/networks/my-network"
+            subnetwork: "https://www.googleapis.com/compute/v1/projects/{{ env }}/regions/{{ item[2] }}/subnetworks/{{ item[2] }}-subnet"
+            #access_configs:
+            #  - name: 'External NAT'
+            #    nat_ip: #{ip: 35.192.233.59, ip: 35.232.93.113}
+            #    type: 'ONE_TO_ONE_NAT'
+      zone: '{{ item[2] }}-{{ item[0] }}'
+      tags:
+        items:
+         - solr_internal_tags
+         - ZK_internal_tags
+      project: "{{ env }}"
+      auth_kind: application
+      scopes:
+        - https://www.googleapis.com/auth/compute
+      state: present
+  register: gce
+  with_nested: # to produce Rfactor * shard instances over N zones
+     - "{{ zone }}"
+     - "{{ range(1,shards+1) | list }}"
+     - "{{ region }}"
+  async: 600
+  poll: 5
+
+- name: add items to hosts array fact
+  set_fact:
+     hosts: "{{ hosts }} + [ '{{ item.name }}' ]"
+  loop: "{{ gce.results }}"
+
+- file: # i do not need inventory i need temp file
+    path: /tmp/hosts
+    state: touch
+    mode: "u+rw,g+r,o+r"
+
+- lineinfile: #if we're going to use something like Ansible and break the tasks of ansible among ansible tasks. This artificat has to live in somewhere like GCS.
+    path: /tmp/hosts
+    state: present
+    line: "[solr]"
+    insertafter: EOF
+
+- lineinfile: #if we're going to use something like Ansible and break the tasks of ansible among ansible tasks. This artificat has to live in somewhere like GCS.
+    path: /tmp/hosts
+    state: present
+    line: "{{ item }}"
+    insertafter: EOF
+  with_items: "{{ hosts }}"

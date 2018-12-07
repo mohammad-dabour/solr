@@ -1,0 +1,28 @@
+---
+#- name: debug 
+#  debug:
+#    msg: "{{ z }} AND {{ range(1,s+1) | list }}"
+
+- name: adding shard
+  uri:
+    url: "http://{{ host }}:8983/solr/admin/collections?action=CREATE&name={{ collection }}&numShards={{ shardNum }}&replicationFactor={{ replicas }}&maxShardsPerNode={{ maxShardsPerNode }}&collection.configName={{ collection }}Conf&createNodeSet=EMPTY"
+
+
+- set_fact:
+    shardList: |
+        {% set count = 1 %}
+        {% for item in  s  %} #range(1,(shardNum | int)+1)
+        {{item}}: {{ count }}
+        {% set count = count + 1 %}
+        {% endfor %}
+
+- set_fact:
+    final_dict: "{{shardList|from_yaml}}"
+
+
+- name: adding replicas to their shards based on sopecified group
+  uri:
+    url: "http://{{ host }}:8983/solr/admin/collections?action=ADDREPLICA&collection={{ collection }}&shard=shard{{final_dict[ item[1] ] }}&node=solr-{{ env }}-{{ region }}-{{ item[0] }}-{{ item[1] }}.{{ fqd }}"
+  with_nested:
+    - "{{ z }}"
+    - "{{ s }}"

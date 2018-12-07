@@ -1,0 +1,23 @@
+---
+- name: restart service
+  service:
+    name: "{{ service_name }}"
+    state: restarted
+    sleep: 5
+
+- name: start service
+  service:
+    name: "{{ service_name }}"
+    state: started
+    sleep: 5
+
+- name: enabled service
+  service:
+    name: "{{ service_name }}"
+    state: enabled
+
+
+- name: stop service
+  service:
+    name: "{{ solr_service_name }}"
+    state: stopped

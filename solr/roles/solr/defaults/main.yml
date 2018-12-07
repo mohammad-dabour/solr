@@ -1,0 +1,18 @@
+solr_create_user: true
+solr_user: solr
+solr_bucket: solr-bucket-gcp
+gs_solr: solr
+solr_pkg: "solr-*"
+solr_artifcat_dir: /tmp
+solr_install_dir: /opt
+solr_install_path:  /opt/solr 
+solr_home: #leave it for default /var/solr/data unless necessary.
+#TODO incase multi Solr instances on same  vm then we need to change this to be dict like (solr_1:8983, solr_2:8984.., also for service name solr_service_name to be for example (s1:solr1,s2:solr2 ..etc)) 
+solr_port: "8983"
+solr_service_name: solr
+solr_restart_handler_enabled: true
+solr_start_handler_enabled: true
+solr_stopped_handler_enabled: true
+solr_enable_handler_enabled: true
+SOLR_BASE_DIR: /var/solr
+ZK_CLIENT_TIMEOUT: 15000 

@@ -1,0 +1,47 @@
+---
+# get java bucket from gs storage:
+
+- name: Download java pakcage from gcp storage. Use gsutil instado of gc_storage it requires lord access using boto.
+  shell: >
+     /usr/bin/gsutil cp gs://"{{ gcp_bucket }}/{{ java_gs_path }}/{{ java }}"  "{{ java_artifcat_dir }}/"
+  register: gc_storage_result 
+
+
+- name: get the output directory name
+  shell: "ls {{ java_artifcat_dir }}/{{ java }}"
+  register: java_out
+
+#- name: make sure all celan!. #should not be necessary but in local tests it server the purpose.
+#  file: 
+#    state: absent
+#    path: "{{ jvm }}"
+
+- name: Creates JVM directory
+  file: 
+     state: directory
+     path: "{{ jvm }}"
+  register: jvm_result
+
+
+- name: unarchive jdk into path
+  unarchive:
+    src: "{{ java_out.stdout }}"
+    dest: "{{ jvm }}/"
+    remote_src: yes
+  register: unarchive_result
+
+
+- name: get the output directory name
+  command: "ls {{ jvm }}/"
+  register: dir_out
+
+- name: rename directory.
+  command: "mv {{ jvm }}/{{ dir_out.stdout_lines[0] }} {{ java_home }}"
+  register: mv_out
+
+
+- name: update-java alternatives.
+  alternatives:
+    name: java
+    link: /usr/bin/java
+    path: "{{ java_home }}/bin/java"
