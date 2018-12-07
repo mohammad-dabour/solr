@@ -67,7 +67,6 @@ RUN sudo apk add --update --no-cache netcat-openbsd
 #ENV PATH $PATH:/usr/local/gcloud/google-cloud-sdk/bin
 VOLUME ["/home/deployer/.config"]
 
-ENV GODir=$GOPATH
 COPY  .  /tmp
 
 WORKDIR /home/deployer
