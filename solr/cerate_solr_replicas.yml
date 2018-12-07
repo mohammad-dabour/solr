@@ -6,6 +6,7 @@
      - roles/solr_gc_template/defaults/main.yml
   vars:
      solr_host: "{{ solr }}"
+     region: "{{ region }}"
   tasks:
      - include_tasks: files/create_all_replicas.yml
        vars:
