@@ -1,7 +1,7 @@
 
 # KT for Solr Image build
 * #####  The scope of this document does not cover how ansible is working, nor it covers how solr is working
-* #####  It is trying to be a guild for which part is doing what part during Solr releases
+* #####  It is trying to be a guide for which part is doing what part during Solr releases
 * #####  We build the image only over stage and we migrate to production.
 
 ### Job build components:
