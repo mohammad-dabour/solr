@@ -1,5 +1,5 @@
 FROM golang:alpine
-MAINTAINER "Mohammad Dabour <mohammad.mdabour@gmail.com>"
+MAINTAINER "Mohammad Dabour @MDab0ur"
 
 
 ENV PACKER_DEV=1
