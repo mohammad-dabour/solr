@@ -2,7 +2,7 @@
 # Solr Image build
 * #####  The scope of this document does not cover how ansible is working, nor it covers how solr is working
 * #####  It is trying to be a guide for which part is doing what part during Solr releases
-* #####  I build the image only over stage and we migrate to production.
+* #####  I build the image only over stage and then promote to production.
 
 ### Job build components:
 * Packer
