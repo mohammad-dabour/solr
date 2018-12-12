@@ -7,7 +7,7 @@
 ### Components:
 
 * Ansible
-* Vulcan for ZK.
+* ZK is not covered in this part.
 
 #### Create a cluster:
 
