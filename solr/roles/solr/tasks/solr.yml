@@ -14,7 +14,7 @@
   apt: name=systemd state=installed
 
 
-- name: Download java pakcage from gcp storage. Use gsutil instad of gc_storage it requires lord access using boto let's not use it.
+- name: Download Solr pakcage from gcp storage. Use gsutil instad of gc_storage it requires lord access using boto let's not use it.
   shell: >
      /usr/bin/gsutil cp gs://"{{ solr_bucket }}/{{ gs_solr }}/{{ solr_pkg }}"  "{{ solr_artifcat_dir }}/"
   register: gc_storage_result
