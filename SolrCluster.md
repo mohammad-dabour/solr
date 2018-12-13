@@ -2,12 +2,13 @@
 # KT for Solr Cluster Deploy
 * #####  The scope of this document does not cover how ansible is working, nor it covers how solr is working.
 * #####  It is trying to be a guide for which part is doing what part during Solr releases.
-
+* ##### There are reasons why I did not use migs for this release on GCP. However next updates will be using migs.
+* ##### Currently cluster supports multiple reagions and multiple zones.
 
 ### Components:
 
 * Ansible
-* ZK is not covered in this part.
+* ZK is not covered in this part (to be covred soon).
 
 #### Create a cluster:
 
