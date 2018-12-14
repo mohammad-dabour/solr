@@ -11,7 +11,7 @@ from datetime import datetime
 """
  This file to be utlized internal. This is not config file.
  Only code can write it and modifiy it and always has one location.
- getInstances() will write inot this file location /tmp/solrvms.
+ getInstances() will write into this file location /tmp/solrvms.
  And will renew when necessary.
 """
 
