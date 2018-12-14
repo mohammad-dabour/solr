@@ -77,8 +77,10 @@ def getId(vm):
 
     if  os.path.isfile(solrvms) and os.stat(solrvms).st_size > 0:
 
-        # The loop here because we're looping over strings.
-        # Then onverting them to dictionaries.
+        """
+        The loop here because we're looping over strings.
+        Then converting them to dictionaries. then return VM InstanceID
+        """
 
         for line in open(solrvms,'r').readlines():
 
@@ -101,23 +103,27 @@ def getHost():
 
     elif os.stat(solrvms).st_size == 0:
         count = 0
-        # Belwo will exectue only if file exits but  empty
-        # It will try 3 times before failing.
-        # It is very rare case but may happen due to human error!.
-
+        """
+         Bellow will exectue only if file exists but  empty
+         It will try 3 times before failing.
+         It is very rare case but may happen due to human error!.
+        """
         while os.stat(solrvms).st_size <= 0 and count < 3:
             getInstances()
             count+=1
+            
             if os.stat(solrvms).st_size <= 0 and count >= 3:
                 logging.fatal("{} VM hosts are not found after 3 retrys."
                 .format(datetime.now()))
                 sys.exit(3)
 
-    # We should shuffel those VMs and not keep hitting same VMs for each request
-    # In such case we make sure, we're not opening many threads on same VMs.
-    # we're not building up into the heap of this VMs.
-    # behave as ZKclient shuffel  instances randomly to load balance connections
-
+    """ 
+     We should shuffel those VMs and not keep hitting same VMs for each request
+     In such case we make sure,whoever is uisng the util speacilly if many individuales doing at same time
+     we're not opening many threads on same VMs.
+     we're not building up into the heap of this VMs.
+     behave as ZKclient shuffel  instances randomly to load balance connections
+    """
     hosts = [host.strip('\n\r') for host in open(solrvms,'r').readlines() ]
     vmindex = random.randint(1, len(hosts)-1)
 
