@@ -1,6 +1,7 @@
 FROM golang:alpine
 MAINTAINER "Mohammad Dabour @mdabour"
 
+# This image has go as packer prerequisite, and having ansible, adding deployer user and also gcloud utils.
 
 ENV PACKER_DEV=1
 RUN apk add --update sudo
