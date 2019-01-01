@@ -108,7 +108,7 @@ def getHost():
          It will try 3 times before failing.
          It is very rare case but may happen due to human error!.
         """
-        while os.stat(solrvms).st_size <= 0 and count < 3:
+        while os.stat(solrvms).st_size == 0 and count < 3:
             getInstances()
             count+=1
             
