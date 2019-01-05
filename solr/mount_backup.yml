@@ -14,6 +14,6 @@
 #        opts: rw,noauto,user
 #        state: present
 
-    - name: Mount bucket into local file system. just incase the system rebooted the bucket has to comeup
+    - name: Mount bucket into local file system. 
       shell: |
          sudo -u solr gcsfuse "{{ env }}-solr-backup" /opt/solr-bp 
