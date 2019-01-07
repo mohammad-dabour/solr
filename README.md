@@ -1,6 +1,5 @@
 # Solr Build and Deployment
 * Build Solr image and Deploying solrCloud. currently this is intiial version for deploying solr over google cloud GCP, soon i will publish the AWS version:
-* Both ```solr-ansible/solr/files/replicaStatus.py``` and ```solr-ansible/solr/files/solrutil.py``` are NOT meant for the deployment purposes, i will document thm soon.
 #### Image Build details:
 * [Image build](ImageBuild.md)
 
